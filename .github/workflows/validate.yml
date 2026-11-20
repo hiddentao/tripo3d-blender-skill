@@ -1,0 +1,19 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Every command in the skill runs as written, so its claims are checked.
+      - run: node tools/validate.mjs
+      # The Blender scripts need Blender to run; CI checks that they parse.
+      - run: python3 -m py_compile tripo3d-blender/tools/*.py tools/selftest.py

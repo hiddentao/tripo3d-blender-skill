@@ -1,0 +1,38 @@
+{
+  "name": "tripo3d-blender-skill",
+  "owner": {
+    "name": "hiddentao",
+    "url": "https://github.com/hiddentao"
+  },
+  "description": "Generate base 3D models with Tripo3D and finish them in Blender",
+  "plugins": [
+    {
+      "name": "tripo3d-blender",
+      "source": "./",
+      "description": "Set up Tripo3D from an API key, generate base meshes from text or pictures for the fewest credits, and make every refinement in Blender: size, facing, cleanup, repairs, repainting, levels of detail and GLB export.",
+      "version": "1.0.0",
+      "author": {
+        "name": "hiddentao",
+        "url": "https://github.com/hiddentao"
+      },
+      "homepage": "https://github.com/hiddentao/tripo3d-blender-skill",
+      "repository": "https://github.com/hiddentao/tripo3d-blender-skill",
+      "license": "MIT",
+      "category": "development",
+      "keywords": [
+        "3d",
+        "tripo3d",
+        "blender",
+        "mesh",
+        "glb",
+        "gltf",
+        "lod",
+        "agent-skills"
+      ],
+      "skills": [
+        "./tripo3d-blender"
+      ],
+      "strict": false
+    }
+  ]
+}
