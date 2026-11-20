@@ -27,9 +27,19 @@ about three times as much as the one most jobs need. And a GLB stores every
 texture seam as separate vertices, which breaks simple Blender repairs unless
 the seams are merged first.
 
+The mesh copies its input picture, so the cheapest fix is a better picture.
+When a model must match a target, such as concept art, the skill has the
+agent make the input pictures first and give them to a separate reviewer,
+another agent or a person, whose job is to fail them against the target. Only
+pictures that pass go to Tripo3D. In the project this skill comes from, eight
+models made this way each took one run.
+
 The agent gets:
 
 - setup steps, tested on macOS, that keep the API key out of the chat;
+- a review loop for the input pictures: a checklist written from the target,
+  fresh candidates for each view, and a separate reviewer that measures each
+  one before any credits are spent;
 - a generation flow that dry-runs every request for free first, picks the
   model on purpose and asks the human above set credit limits;
 - two Blender scripts that run with no window. One finishes a raw model:
@@ -43,20 +53,22 @@ The agent gets:
 
 1. **Take the base from Tripo3D, do the fine work in Blender.** Pay for a new
    run only when the shape is wrong.
-2. **Use the official CLI.** `npm install -g tripo-cli`, then
+2. **Have the input pictures reviewed before you pay.** A fault in a picture
+   comes back in the mesh, and a new run costs the credits again.
+3. **Use the official CLI.** `npm install -g tripo-cli`, then
    `tripo login --key` with the key read from the secret store.
-3. **Keep the key out of chat.** The human stores it; the agent never asks
+4. **Keep the key out of chat.** The human stores it; the agent never asks
    for it or prints it.
-4. **Name the model and dry-run first.** The default P2 model costs about
+5. **Name the model and dry-run first.** The default P2 model costs about
    three times as much as H3.1, and a dry run shows the cost for free.
-5. **Keep the raw download.** Links expire in minutes and a model update
+6. **Keep the raw download.** Links expire in minutes and a model update
    changes the mesh.
-6. **Finish headless from the raw file,** and look at rendered previews after
+7. **Finish headless from the raw file,** and look at rendered previews after
    every change.
-7. **Merge seams before repairs,** or every seam counts as a hole.
-8. **Use live Blender to try things,** then write the steps into the build
+8. **Merge seams before repairs,** or every seam counts as a hole.
+9. **Use live Blender to try things,** then write the steps into the build
    script.
-9. **Stop on credit errors.** Retries fail the same way.
+10. **Stop on credit errors.** Retries fail the same way.
 
 ## Requirements
 
@@ -146,6 +158,8 @@ Ask for the outcome. The agent reads the skill and follows it:
   `tripo3d-api-key`."
 - "Make a weathered stone lantern, 2.2 m tall, from `lantern.png`. I need a
   GLB with two lower levels of detail and textures no larger than 512 texels."
+- "Make the lantern in `concept.png` as a 3D model. Have the input pictures
+  reviewed against the concept before you spend credits."
 - "The statue's hands look melted. Fix them in Blender without generating it
   again."
 
@@ -155,9 +169,10 @@ over 50 credits, any run on the more expensive P2 model, and any batch over
 
 ## How it is laid out
 
-`tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in 193
-lines. The four files in `references/` cover setup, generation, Blender and
-errors in 616 lines, and the agent reads each one only when a task needs it.
+`tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in 210
+lines. The five files in `references/` cover setup, input pictures,
+generation, Blender and errors in 741 lines, and the agent reads each one
+only when a task needs it.
 `tools/` holds the two Blender scripts that the skill runs.
 
 Outside the skill directory, `tools/validate.mjs` checks the skill against the

@@ -1,6 +1,6 @@
 ---
 name: tripo3d-blender
-description: Make 3D models with Tripo3D and finish them in Blender. Tripo3D generates the base mesh from a prompt or a picture, and every fine refinement happens in Blender, headless or live, such as size, facing, pivot, cleanup, sculpted fixes, repainting, texture size, levels of detail and GLB export. Use when asked to generate or make a 3D model, statue, prop, building, rock, character or game asset from text or an image; when setting up Tripo3D on a machine (API key, keychain, tripo-cli, tripo login, the Tripo MCP server); when a generated model needs fixing, retopology, LODs or engine-ready export; or when someone mentions tripo-mcp, Tripo Bridge, Tripo credits, tripo make or Blender MCP for generated models.
+description: Make 3D models with Tripo3D and finish them in Blender. Tripo3D generates the base mesh from a prompt or a picture, and every fine refinement happens in Blender, headless or live, such as size, facing, pivot, cleanup, sculpted fixes, repainting, texture size, levels of detail and GLB export. Use when asked to generate or make a 3D model, statue, prop, building, rock, character or game asset from text or an image, or one that must match concept art or a photo, including making and reviewing the input pictures before any credits are spent; when setting up Tripo3D on a machine (API key, keychain, tripo-cli, tripo login, the Tripo MCP server); when a generated model needs fixing, retopology, LODs or engine-ready export; or when someone mentions tripo-mcp, Tripo Bridge, Tripo credits, tripo make or Blender MCP for generated models.
 license: MIT
 metadata:
   repository: https://github.com/hiddentao/tripo3d-blender-skill
@@ -28,7 +28,8 @@ when the task needs its detail.
 | Reference | Open it when you are | Lines |
 | --- | --- | --- |
 | [setup](references/setup.md) | installing or signing in, adding the MCP server, working on Linux, or tempted by another Tripo route | 146 |
-| [generation](references/generation.md) | choosing a model or parameters, using several pictures, chaining Tripo's own steps, or counting credits | 144 |
+| [pictures](references/pictures.md) | making the input pictures for a model that must match a target picture, and having them reviewed | 123 |
+| [generation](references/generation.md) | choosing a model or parameters, using several pictures, chaining Tripo's own steps, or counting credits | 146 |
 | [blender](references/blender.md) | fixing a generated model, working in a live Blender, or fitting these steps into a project's build | 283 |
 | [errors](references/errors.md) | reading a failed command's exit code, or a Blender script error | 43 |
 
@@ -88,8 +89,24 @@ models that a person sends from the Tripo website.
 **Choose the input.** One picture of the whole object, alone, on a plain
 background, in a front or three-quarter view. Two to four pictures cover the
 hidden sides; name the files `front`, `left`, `back` and `right`. The model
-copies the picture's surface, so wear, moss and colour must be in the
-picture. A quoted prompt also works, with less control.
+copies the picture's shape, surface and colour, so wear, moss and colour must
+be in the picture. A quoted prompt also works, with less control.
+
+**Have the pictures reviewed before you pay.** A fault in a picture comes
+back in the mesh, and a new run costs the credits again. When the human gives
+a target, such as concept art or a photo, and wants the model to match it:
+
+1. write a checklist from the target alone: what each part shows, what fails,
+   and ratios and colours that can be measured;
+2. make two to eight fresh candidates for each view, the front first, and the
+   other views from the passed front;
+3. give the target, the checklist and the candidates to a separate reviewer,
+   another agent or a person who did not make them, whose job is to fail them;
+4. run Tripo3D only on pictures that passed, and write down the points the
+   reviewer let through, for the Blender finish.
+
+[pictures](references/pictures.md) has the loop, how to brief the reviewer,
+what fails a picture and how to measure one.
 
 **Choose the model.** Without `--model`, every run uses P2, which costs about
 three times as much as H3.1.

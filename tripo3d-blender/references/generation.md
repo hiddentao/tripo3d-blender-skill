@@ -23,7 +23,9 @@ The picture decides the result. Give the whole object, alone, on a plain
 background, lit softly and evenly. The model copies the surface, so wear,
 moss, rust and colour must be in the picture. When a picture of one object is
 cut from a larger scene, crop it close and clear the background first.
-Pictures up to 20 MB are accepted.
+Pictures up to 20 MB are accepted. [pictures](pictures.md) has how to make
+the pictures for a model that must match a target, and how to have them
+reviewed before you pay.
 
 ## Models
 

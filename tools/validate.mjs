@@ -5,7 +5,7 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 const SKILL_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../tripo3d-blender");
-const ORDER = ["setup", "generation", "blender", "errors"];
+const ORDER = ["setup", "pictures", "generation", "blender", "errors"];
 const TOOLS = ["finish_model.py", "preview_model.py"];
 
 // The skill was cut from one machine's working setup. These are the values

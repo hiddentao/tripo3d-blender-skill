@@ -9,8 +9,8 @@
     {
       "name": "tripo3d-blender",
       "source": "./",
-      "description": "Set up Tripo3D from an API key, generate base meshes from text or pictures for the fewest credits, and make every refinement in Blender: size, facing, cleanup, repairs, repainting, levels of detail and GLB export.",
-      "version": "1.0.0",
+      "description": "Set up Tripo3D from an API key, have the input pictures reviewed against a target before any credits are spent, generate base meshes from text or pictures for the fewest credits, and make every refinement in Blender: size, facing, cleanup, repairs, repainting, levels of detail and GLB export.",
+      "version": "1.1.0",
       "author": {
         "name": "hiddentao",
         "url": "https://github.com/hiddentao"
