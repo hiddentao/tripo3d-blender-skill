@@ -6,7 +6,7 @@ import { dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 const SKILL_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../tripo3d-blender");
 const ORDER = ["setup", "pictures", "generation", "blender", "errors"];
-const TOOLS = ["finish_model.py", "preview_model.py"];
+const TOOLS = ["finish_model.py", "preview_model.py", "prepare_views.py", "compare_views.py"];
 
 // The skill was cut from one machine's working setup. These are the values
 // that must not travel with it: a home folder, the tools that ran it, and the
