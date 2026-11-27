@@ -77,7 +77,9 @@ The agent gets:
 6. **Keep the key out of chat.** The human stores it; the agent never asks
    for it or prints it.
 7. **Name the model and dry-run first.** The default P2 model costs about
-   three times as much as H3.1, and a dry run shows the cost for free.
+   three times as much as H3.1, and a dry run shows the cost for free. With
+   both a Tripo and a fal.ai account, compare the two routes' prices before
+   paying.
 8. **Keep the raw download.** Links expire in minutes and a model update
    changes the mesh.
 9. **Finish headless from the raw file,** compare it with the views, and look
@@ -193,7 +195,7 @@ over 50 credits, any run on the more expensive P2 model, and any batch over
 ## How it is laid out
 
 `tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in
-308 lines. The seven files in `references/` cover setup, the spec and
+317 lines. The seven files in `references/` cover setup, the spec and
 concept, scenes, input pictures, generation, Blender and errors, and the
 agent reads each one only when a task needs it.
 `tools/` holds the five Blender scripts that the skill runs.

@@ -158,6 +158,46 @@ Blender's result spoils the shape. Tripo's retopology rebuilds the mesh and
 bakes the textures onto it, which keeps a low-poly model looking like the
 original.
 
+## Tripo direct or fal.ai
+
+The same Tripo3D models run two ways: directly on the human's Tripo account,
+through `tripo-cli` or Tripo's MCP server, or through fal.ai's hosted Tripo
+endpoints, billed to the human's fal.ai account. Compare them before each
+paid step, and take the cheaper route that supports every setting the model
+needs. Show the human both figures when you ask for the go-ahead.
+
+1. **Count the credits, for free.** Use the CLI's dry run
+   (`tripo make ... --dry-run --json`, which needs no key), or call the MCP
+   server's generation tool (`tripo_image_to_3d`, `tripo_multiview_to_3d` or
+   `tripo_text_to_3d`) with `dry_run: true`. Both return the list price in
+   credits. `tripo_plan` prices a job of several steps; steps it marks
+   `not_estimated` are not free.
+2. **Price the direct route.** Tripo's billing page, read on 2026-11-27,
+   sets 1 credit at USD 0.01, and from 2026-12-01 its console shows prices
+   and balances in dollars at that rate. Top-up benefits can make the
+   human's own rate lower. Ask the human once for the rate they pay, and
+   record it in the project notes. Check `tripo balance` (or the MCP tool
+   `tripo_balance`): credits already bought are already paid for, and a run
+   the balance cannot cover fails with exit code 4.
+3. **Price the fal.ai route.** Read fal.ai's current rate for the endpoint,
+   such as `tripo3d/h3.1/multiview-to-3d`, with fal.ai's pricing tool when
+   its MCP server is connected, or on the model's page at
+   <https://fal.ai/models>. On 2026-11-27 its H3.1 endpoints billed USD 0.01
+   per Tripo credit. This skill did not see the final charge of its own fal.ai
+   run, so check the account's history after the first run.
+4. **Check the settings.** On 2026-11-27, fal.ai's H3.1 endpoints took no
+   `delight` or `texture_version` setting, offered `texture_quality` only as
+   `standard` or `detailed`, and set `pbr` on by default. Tripo's picture
+   tools, such as image-to-multiview, were not among fal.ai's endpoints. A
+   request that needs any of these goes direct, whatever it costs.
+5. **Choose and record.** Write the route, the credit estimate and the
+   dollar figure for each route beside the raw files, with the run's
+   `credits_consumed` (direct) or the fal.ai request id.
+
+The same comparison applies to pictures. Tripo's picture models cost 5 to 20
+credits a picture on its price list; an image model on fal.ai has its own
+rate per picture, such as USD 0.15 for Nano Banana Pro at 2K on 2026-11-27.
+
 ## Keeping results
 
 Tripo deletes a task's files after a while (status `expired`), and its

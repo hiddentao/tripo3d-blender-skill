@@ -1,6 +1,6 @@
 ---
 name: tripo3d-blender
-description: Make 3D models with Tripo3D and finish them in Blender, from a written spec to an engine-ready GLB. Covers the spec, concept art, breaking a scene concept into single items, matched reference views from every side with plain or transparent backgrounds and controlled light, a review of those pictures before any credits are spent, AAA settings, and every refinement in Blender, such as size, facing, cleanup, repairs, baking a detailed mesh onto a game mesh, levels of detail and GLB export, with null3d as the engine for web targets. Use when asked to generate or make a 3D model, prop, character, building, environment or game asset from text, concept art, a scene or a photo; when setting up Tripo3D on a machine (API key, keychain, tripo-cli, tripo login, the Tripo MCP server); when a generated model needs fixing, retopology, baking, LODs or export; or when someone mentions tripo-mcp, Tripo Bridge, Tripo credits, tripo make or Blender MCP for generated models.
+description: Make 3D models with Tripo3D and finish them in Blender, from a written spec to an engine-ready GLB. Covers the spec, concept art, breaking a scene concept into single items, matched reference views from every side with plain or transparent backgrounds and controlled light, a review of those pictures before any credits are spent, AAA settings, and every refinement in Blender, such as size, facing, cleanup, repairs, baking a detailed mesh onto a game mesh, levels of detail and GLB export, with null3d as the engine for web targets. Use when asked to generate or make a 3D model, prop, character, building, environment or game asset from text, concept art, a scene or a photo; when setting up Tripo3D on a machine (API key, keychain, tripo-cli, tripo login, the Tripo MCP server); when a generated model needs fixing, retopology, baking, LODs or export; or when someone mentions tripo-mcp, Tripo Bridge, Tripo credits, tripo make, Tripo on fal.ai or Blender MCP for generated models.
 license: MIT
 metadata:
   repository: https://github.com/hiddentao/tripo3d-blender-skill
@@ -33,11 +33,11 @@ when the task needs its detail.
 
 | Reference | Open it when you are | Lines |
 | --- | --- | --- |
-| [setup](references/setup.md) | installing or signing in, adding the MCP server, working on Linux, or tempted by another Tripo route | 151 |
+| [setup](references/setup.md) | installing or signing in, adding the MCP server, working on Linux, or tempted by another Tripo route | 156 |
 | [concept](references/concept.md) | writing the spec, choosing a quality tier, or making and accepting concept art | 135 |
 | [scenes](references/scenes.md) | making the items of a scene or environment, such as a furnished room, from one scene concept | 141 |
-| [pictures](references/pictures.md) | making the reference views, preparing and measuring them, and having them reviewed | 374 |
-| [generation](references/generation.md) | choosing a model or parameters, AAA settings, using several pictures, chaining Tripo's own steps, or counting credits | 186 |
+| [pictures](references/pictures.md) | making the reference views, preparing and measuring them, and having them reviewed | 376 |
+| [generation](references/generation.md) | choosing a model or parameters, AAA settings, using several pictures, chaining Tripo's own steps, or counting credits | 226 |
 | [blender](references/blender.md) | fixing a model, checking it against the views, baking a game mesh, handing it to null3d, or working in a live Blender | 443 |
 | [errors](references/errors.md) | reading a failed command's exit code, or a script error | 51 |
 
@@ -192,6 +192,15 @@ before paying. `generation_credits_estimate` is the list price of the
 generation alone. For a standard prop, drop `geometry_quality=detailed` and
 lower `face_limit`; [generation](references/generation.md) has the
 parameters.
+
+**Choose the route.** When the human has a Tripo account and a fal.ai
+account, compare the two before you pay: the dry run's credits at the
+human's own rate per Tripo credit (list price USD 0.01), against fal.ai's
+current rate for its Tripo endpoint. Check `tripo balance` too, because
+credits already bought are already paid for. fal.ai's H3.1 endpoints lack
+`delight`, `texture_version` and 8K textures, so a request that needs them
+goes direct. Show the human both figures.
+[generation](references/generation.md#tripo-direct-or-falai) has the steps.
 
 **Run it** without `--dry-run`. The command blocks until the model,
 `preview.png` and `task.json` are in the `-o` folder, then prints one JSON

@@ -264,6 +264,8 @@ no dry run, and they were not tested for this skill.
   photo for image-to-model.
 
 Views from these tools still go through `prepare_views.py` and the reviewer.
+Compare their credit cost with the image model the human pays for elsewhere,
+as in [generation](generation.md#tripo-direct-or-falai).
 
 ## Preparing the views
 

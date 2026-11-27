@@ -112,7 +112,11 @@ claude mcp get tripo                # expect "Status: ✔ Connected"
 ```
 
 `--toolset full` gives Tripo's full hosted tool set; the default gives four
-tools (make, task, balance and history). The tools appear after `/mcp`
+tools (make, task, balance and history). In the full set, the generation
+tools take `dry_run: true`, which returns the request and its cost in
+credits without spending any, and `tripo_plan` prices a job of several
+steps. [generation](generation.md#tripo-direct-or-falai) uses them to
+compare a direct run with fal.ai. The tools appear after `/mcp`
 reconnects or in a new session. `--scope user` writes to the config of the
 Claude Code that runs it, which `CLAUDE_CONFIG_DIR` selects, so a machine
 with several config folders needs the command once in each. Other MCP
@@ -133,8 +137,9 @@ clients start the same server with the command `tripo` and the arguments
   host's account and wraps Tripo's parameters in its own. fal.ai's H3.1
   endpoints (`tripo3d/h3.1/image-to-3d` and `tripo3d/h3.1/multiview-to-3d`)
   charged USD 0.01 a credit on 2026-11-27 and took no `delight` or
-  `texture_version` setting. Use the direct key when there is one; a host is
-  a fallback when the human already pays for it.
+  `texture_version` setting. When the human has both accounts, compare the
+  two routes before each paid step, as in
+  [generation](generation.md#tripo-direct-or-falai).
 - **Raw calls to the web API** work: the `/v3/...` endpoints at
   `https://openapi.tripo3d.ai`, with the key as a Bearer token. The CLI
   already uploads, waits, retries rate limits, checks parameters and

@@ -52,7 +52,11 @@ about three times the cost of H3.1 (`--model tripo-v3.1`). A dry run
 (`--dry-run --json`) checks the request and estimates the credits for free.
 Ask the human before any run over 50 credits, any P2 run, or a batch over 150
 credits. AAA settings (`geometry_quality=detailed`, detailed textures) cost
-60 to 70 credits.
+60 to 70 credits. When the human has both a Tripo account and a fal.ai
+account, price the run both ways before paying: the credits at the human's
+own rate per Tripo credit (list price USD 0.01), against fal.ai's current
+rate for its Tripo endpoint. Take the cheaper route that supports every
+setting, and show the human both figures.
 
 **8. Keep the raw download.** Links expire after about five minutes and a
 model update changes the mesh, so copy the model, `task.json` and
