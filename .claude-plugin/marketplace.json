@@ -9,8 +9,8 @@
     {
       "name": "tripo3d-blender",
       "source": "./",
-      "description": "Set up Tripo3D from an API key, have the input pictures reviewed against a target before any credits are spent, generate base meshes from text or pictures for the fewest credits, and make every refinement in Blender: size, facing, cleanup, repairs, repainting, levels of detail and GLB export.",
-      "version": "1.1.0",
+      "description": "Make 3D models from a written spec to an engine-ready GLB: concept art, scene breakdown into items, matched reference views from every side, reviewed before any credits are spent, one Tripo3D run, and every refinement in Blender, including AAA baking onto a game mesh, levels of detail, GLB export and the hand-off to null3d for web targets.",
+      "version": "1.2.0",
       "author": {
         "name": "hiddentao",
         "url": "https://github.com/hiddentao"
@@ -27,7 +27,11 @@
         "glb",
         "gltf",
         "lod",
-        "agent-skills"
+        "agent-skills",
+        "concept-art",
+        "reference-views",
+        "aaa",
+        "null3d"
       ],
       "skills": [
         "./tripo3d-blender"

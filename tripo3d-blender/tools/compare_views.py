@@ -94,6 +94,8 @@ def setup_scene(size):
 
 def main():
     a = parse()
+    if not os.path.exists(os.path.join(a.views, 'views.json')):
+        sys.exit(f'compare_views: no views.json in {a.views}; prepare the views with prepare_views.py')
     with open(os.path.join(a.views, 'views.json')) as f:
         settings = json.load(f)
     os.makedirs(a.out, exist_ok=True)

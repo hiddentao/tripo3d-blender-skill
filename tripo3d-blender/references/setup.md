@@ -35,7 +35,8 @@ exclusive rights.
 
 ## Installing the CLI
 
-`tripo-cli` needs Node 20 or later.
+`tripo-cli` 0.11.4 needs Node 22.12 or later (its `engines` field, read on
+2026-11-27); 0.11.2 ran on Node 24.
 
 ```bash
 npm install -g tripo-cli
@@ -129,7 +130,11 @@ clients start the same server with the command `tripo` and the arguments
   models that a person exports from Tripo Studio. "Waiting for connection" in
   its panel is its normal state. An agent cannot send it commands.
 - **Tripo through a model host,** such as fal.ai, works, but it bills the
-  host's account and wraps Tripo's parameters in its own. Use the direct key.
+  host's account and wraps Tripo's parameters in its own. fal.ai's H3.1
+  endpoints (`tripo3d/h3.1/image-to-3d` and `tripo3d/h3.1/multiview-to-3d`)
+  charged USD 0.01 a credit on 2026-11-27 and took no `delight` or
+  `texture_version` setting. Use the direct key when there is one; a host is
+  a fallback when the human already pays for it.
 - **Raw calls to the web API** work: the `/v3/...` endpoints at
   `https://openapi.tripo3d.ai`, with the key as a Bearer token. The CLI
   already uploads, waits, retries rate limits, checks parameters and
