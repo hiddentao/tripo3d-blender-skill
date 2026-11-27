@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Runs the skill's four Blender scripts on a deliberately awkward model and
+# Runs the skill's five Blender scripts on a deliberately awkward model and
 # checks what they produce. Needs Blender 5.x; set BLENDER to its binary if the
 # `blender` command is not on the path. Spends no Tripo3D credits.
 set -euo pipefail
@@ -38,4 +38,15 @@ mv "$work/views/right.png" "$work/views/left.png"
 mv "$work/views/swap.png" "$work/views/right.png"
 run "$tools/compare_views.py" -- "$work/out.glb" "$work/views" "$work/swapped" --size 256 >/dev/null
 run "$here/selftest.py" -- agreement "$work/swapped/compare.json" below 0.8 left right | grep '^SELFTEST'
-echo "OK: the finishing, preview, view and comparison scripts pass"
+
+# The finished model baked onto a mesh of a tenth of its triangles keeps its
+# shape, so it still matches the reference views.
+run "$tools/bake_maps.py" -- "$work/out.glb" "$work/game.glb" --triangles 400 --size 256 \
+  | grep '^BAKED'
+run "$here/selftest.py" -- baked "$work/game.glb" 450 256 | grep '^SELFTEST'
+mv "$work/views/left.png" "$work/views/swap.png"
+mv "$work/views/right.png" "$work/views/left.png"
+mv "$work/views/swap.png" "$work/views/right.png"
+run "$tools/compare_views.py" -- "$work/game.glb" "$work/views" "$work/baked" --size 256 >/dev/null
+run "$here/selftest.py" -- agreement "$work/baked/compare.json" above 0.9 | grep '^SELFTEST'
+echo "OK: the finishing, preview, view, comparison and bake scripts pass"

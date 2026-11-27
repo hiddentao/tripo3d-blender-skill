@@ -9,6 +9,8 @@ Blender side of the self-test that tools/selftest.sh runs.
       --python selftest.py -- views out.glb pictures/
   blender --background --factory-startup --python-exit-code 1 \
       --python selftest.py -- agreement compare.json below 0.8 left right
+  blender --background --factory-startup --python-exit-code 1 \
+      --python selftest.py -- baked game.glb 450 256
 
 "make" writes an awkward model: four textured parts, one of them on a single
 side and one at the front, under a parent that is moved, turned and scaled,
@@ -25,6 +27,10 @@ here, apart from compare_views.py, so a camera mistake in either one shows.
 "agreement" fails unless every outline agreement in a views.json or
 compare.json, or every one for the views named, is above, or below, the
 given value.
+
+"baked" fails unless a baked game GLB holds one mesh of at most the given
+triangles, with a base colour, a normal and a metal-roughness map of the
+given size, and a base colour that is not blank.
 """
 import json
 import os
@@ -165,6 +171,38 @@ def agreement(path, side, limit, names):
     print(f'SELFTEST ok {os.path.basename(path)}: {figures}')
 
 
+def baked(path, most, size):
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.import_scene.gltf(filepath=path)
+    meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
+    assert len(meshes) == 1, f'{path}: {len(meshes)} meshes, expected 1'
+    obj = meshes[0]
+    count = sum(len(poly.vertices) - 2 for poly in obj.data.polygons)
+    assert count <= most, f'{path}: {count} triangles, expected at most {most}'
+    shader = next(n for n in obj.active_material.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+
+    def image_behind(socket):
+        stack = [socket]
+        while stack:
+            for link in stack.pop().links:
+                node = link.from_node
+                if node.type == 'TEX_IMAGE':
+                    return node.image
+                stack.extend(i for i in node.inputs if i.is_linked)
+        return None
+
+    for name in ('Base Color', 'Normal', 'Roughness', 'Metallic'):
+        image = image_behind(shader.inputs[name])
+        assert image is not None, f'{path}: no map behind {name}'
+        assert tuple(image.size) == (size, size), f'{path}: {name} map is {tuple(image.size)}'
+    colour = image_behind(shader.inputs['Base Color'])
+    px = np.empty(size * size * 4, dtype=np.float32)
+    colour.pixels.foreach_get(px)
+    spread = float(px.reshape(-1, 4)[:, :3].std())
+    assert spread > 0.05, f'{path}: base colour map is blank (spread {spread:.3f})'
+    print(f'SELFTEST ok {os.path.basename(path)}: {count} triangles, maps {size}, colour spread {spread:.2f}')
+
+
 def main():
     args = sys.argv[sys.argv.index('--') + 1:]
     if args[:1] == ['make'] and len(args) == 2:
@@ -173,11 +211,13 @@ def main():
         check(args[1:])
     elif args[:1] == ['views'] and len(args) == 3:
         views(args[1], args[2])
+    elif args[:1] == ['baked'] and len(args) == 4:
+        baked(args[1], int(args[2]), int(args[3]))
     elif args[:1] == ['agreement'] and len(args) >= 4 and args[2] in ('above', 'below'):
         agreement(args[1], args[2], float(args[3]), args[4:])
     else:
         sys.exit('usage: selftest.py -- make <raw.glb> | check <file.glb>... | views <file.glb> <folder>'
-                 ' | agreement <json> above|below <value> [view...]')
+                 ' | agreement <json> above|below <value> [view...] | baked <file.glb> <triangles> <size>')
 
 
 main()
