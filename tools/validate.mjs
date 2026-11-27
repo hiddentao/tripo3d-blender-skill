@@ -5,19 +5,19 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 const SKILL_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../tripo3d-blender");
-const ORDER = ["setup", "pictures", "generation", "blender", "errors"];
-const TOOLS = ["finish_model.py", "preview_model.py"];
+const ORDER = ["setup", "concept", "scenes", "pictures", "generation", "blender", "errors"];
+const TOOLS = ["finish_model.py", "preview_model.py", "prepare_views.py", "compare_views.py", "bake_maps.py"];
 
 // The skill was cut from one machine's working setup. These are the values
 // that must not travel with it: a home folder, the tools that ran it, and the
 // project it was first written for. The repository URL is the one place the
-// owner's name belongs.
+// owner's name belongs. null3d, the public web engine that the skill
+// recommends, is not a leak.
 const LEAKS = [
   /\/Users\//,
   /\/home\/[a-z]/,
   /claude-profiles/i,
   /\borca\b/i,
-  /null3d/i,
   /sky-courier/i,
   /hiddentao/i,
 ];

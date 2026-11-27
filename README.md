@@ -2,10 +2,12 @@
 
 An [Agent Skill](https://agentskills.io) that lets coding agents make 3D models
 with [Tripo3D](https://www.tripo3d.ai) and finish them in
-[Blender](https://www.blender.org). Tripo3D turns a picture or a prompt into a
-textured mesh in about a minute. The agent takes that mesh once, keeps it, and
-makes every refinement in Blender: size, facing, cleanup, repairs, repainting,
-texture size, levels of detail and GLB export.
+[Blender](https://www.blender.org), from a written spec to an engine-ready
+GLB. The agent writes the spec, gets concept art accepted, makes matched
+reference views from every side and has them reviewed, then pays for one
+Tripo3D run. It keeps that mesh and makes every refinement in Blender: size,
+facing, cleanup, repairs, baking onto a game mesh, texture size, levels of
+detail and GLB export.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Validate](https://github.com/hiddentao/tripo3d-blender-skill/actions/workflows/validate.yml/badge.svg)](https://github.com/hiddentao/tripo3d-blender-skill/actions/workflows/validate.yml)
@@ -27,24 +29,39 @@ about three times as much as the one most jobs need. And a GLB stores every
 texture seam as separate vertices, which breaks simple Blender repairs unless
 the seams are merged first.
 
-The mesh copies its input picture, so the cheapest fix is a better picture.
-When a model must match a target, such as concept art, the skill has the
-agent make the input pictures first and give them to a separate reviewer,
-another agent or a person, whose job is to fail them against the target. Only
-pictures that pass go to Tripo3D. In the project this skill comes from, eight
-models made this way each took one run.
+The mesh copies its input pictures, so the cheapest fix is a better picture.
+The skill has the agent write a spec, get concept art accepted, and make the
+front, left, back and right views from it, in one scale and one light. A
+script measures how far the views agree, and a separate reviewer, another
+agent or a person, tries to fail them against the concept. Only pictures
+that pass go to Tripo3D. In the project this skill comes from, eight models
+made this way each took one run.
+
+A scene concept, such as a furnished room, becomes an inventory of items,
+each in a tier the human confirms: interactive items and set dressing get
+their own pictures and runs, background items stay as pictures on cards or
+in the wall's texture, and the view outside is one backdrop. Blender puts
+the scene back together. For AAA work, the skill asks Tripo3D
+for its most detailed mesh and bakes it onto a game mesh. For the web, it
+hands the models to the null3d engine.
 
 The agent gets:
 
 - setup steps, tested on macOS, that keep the API key out of the chat;
+- a spec, quality tiers and tested prompts for concept art and for each view,
+  including a way to fix a side view's outline by flipping the view opposite;
+- a way to break a scene concept into items and draw each one on its own;
 - a review loop for the input pictures: a checklist written from the target,
   fresh candidates for each view, and a separate reviewer that measures each
   one before any credits are spent;
 - a generation flow that dry-runs every request for free first, picks the
   model on purpose and asks the human above set credit limits;
-- two Blender scripts that run with no window. One finishes a raw model:
-  transforms, seams, facing, height, ground contact, texture size and levels
-  of detail. The other renders front, side and top previews to check it;
+- five Blender scripts that run with no window. They prepare and measure the
+  view pictures; finish a raw model (transforms, seams, facing, height,
+  ground contact, texture size and levels of detail); render previews;
+  compare the finished model with the views; and bake a detailed model onto
+  a game mesh;
+- the hand-off to null3d for web targets;
 - tested Blender code for common repairs, and a table of when a paid Tripo3D
   step is worth it instead;
 - what to do for every CLI exit code.
@@ -53,22 +70,29 @@ The agent gets:
 
 1. **Take the base from Tripo3D, do the fine work in Blender.** Pay for a new
    run only when the shape is wrong.
-2. **Have the input pictures reviewed before you pay.** A fault in a picture
-   comes back in the mesh, and a new run costs the credits again.
-3. **Use the official CLI.** `npm install -g tripo-cli`, then
+2. **Write the spec, then get the concept accepted** by the human.
+3. **Break a scene into items,** and model only what the player cares
+   about; the rest stays in the background.
+4. **Have the views reviewed before you pay.** A fault in a picture comes
+   back in the mesh, and a new run costs the credits again.
+5. **Use the official CLI.** `npm install -g tripo-cli`, then
    `tripo login --key` with the key read from the secret store.
-4. **Keep the key out of chat.** The human stores it; the agent never asks
+6. **Keep the key out of chat.** The human stores it; the agent never asks
    for it or prints it.
-5. **Name the model and dry-run first.** The default P2 model costs about
-   three times as much as H3.1, and a dry run shows the cost for free.
-6. **Keep the raw download.** Links expire in minutes and a model update
+7. **Name the model and dry-run first.** The default P2 model costs about
+   three times as much as H3.1, and a dry run shows the cost for free. With
+   both a Tripo and a fal.ai account, compare the two routes' prices before
+   paying.
+8. **Keep the raw download.** Links expire in minutes and a model update
    changes the mesh.
-7. **Finish headless from the raw file,** and look at rendered previews after
-   every change.
-8. **Merge seams before repairs,** or every seam counts as a hole.
-9. **Use live Blender to try things,** then write the steps into the build
-   script.
-10. **Stop on credit errors.** Retries fail the same way.
+9. **Finish headless from the raw file,** compare it with the views, and look
+   at rendered previews after every change.
+10. **Merge seams before repairs,** or every seam counts as a hole.
+11. **Bake AAA models onto a game mesh.**
+12. **For the web, use null3d.**
+13. **Use live Blender to try things,** then write the steps into the build
+    script.
+14. **Stop on credit errors.** Retries fail the same way.
 
 ## Requirements
 
@@ -77,13 +101,15 @@ The agent gets:
   [developers.tripo3d.com](https://developers.tripo3d.com) (China mainland),
   with credits. Tripo's terms give paid users the rights to their models,
   publishing and sale included. Free users' models belong to Tripo.
-- Node.js 20 or later, for `tripo-cli`.
+- Node.js 22.12 or later, for `tripo-cli` 0.11.4.
 - Blender 5.x, with the `blender` command on the path.
 - For live control of an open Blender, Blender Lab's
   [MCP add-on and server](https://projects.blender.org/lab/blender_mcp).
 
 Tested on 2026-11-20 with `tripo-cli` 0.11.2, Blender 5.3.0 and Node 24 on
-macOS.
+macOS. The path from concept to finished model was tested on 2026-11-27 on
+Linux with Blender 5.3.0, dry runs of `tripo-cli` 0.11.4, Nano Banana Pro for
+the pictures and one H3.1 run, both through fal.ai.
 
 ## Install
 
@@ -160,6 +186,8 @@ Ask for the outcome. The agent reads the skill and follows it:
   GLB with two lower levels of detail and textures no larger than 512 texels."
 - "Make the lantern in `concept.png` as a 3D model. Have the input pictures
   reviewed against the concept before you spend credits."
+- "Here is a concept of a games room. Make the pool table, the chairs and the
+  trophy cabinet as separate AAA models for our null3d web game."
 - "The statue's hands look melted. Fix them in Blender without generating it
   again."
 
@@ -169,11 +197,11 @@ over 50 credits, any run on the more expensive P2 model, and any batch over
 
 ## How it is laid out
 
-`tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in 210
-lines. The five files in `references/` cover setup, input pictures,
-generation, Blender and errors in 741 lines, and the agent reads each one
-only when a task needs it.
-`tools/` holds the two Blender scripts that the skill runs.
+`tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in
+322 lines. The seven files in `references/` cover setup, the spec and
+concept, scenes, input pictures, generation, Blender and errors, and the
+agent reads each one only when a task needs it.
+`tools/` holds the five Blender scripts that the skill runs.
 
 Outside the skill directory, `tools/validate.mjs` checks the skill against the
 spec and its own conventions, and `tools/selftest.sh` runs the Blender scripts
@@ -185,8 +213,9 @@ on a test model.
 ./tools/selftest.sh                 # BLENDER=/path/to/blender if it is not on the path
 ```
 
-It builds an awkward model, finishes it, checks every output file and renders
-the previews. It takes about five seconds and spends no Tripo3D credits.
+It builds an awkward model, finishes it, checks every output file, renders
+the previews, prepares and compares reference views, and bakes the model onto
+a lighter mesh. It takes about 25 seconds and spends no Tripo3D credits.
 
 ## Contributing
 

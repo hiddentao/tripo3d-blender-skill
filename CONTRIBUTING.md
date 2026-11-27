@@ -2,7 +2,7 @@
 
 Issues and pull requests are welcome.
 
-The skill is prose and two scripts that an agent runs as written, so a wrong
+The skill is prose and five scripts that an agent runs as written, so a wrong
 command or a stale flag fails on someone else's machine. Three checks stand
 between a change and a merge, and CI runs two of them.
 
@@ -43,12 +43,19 @@ CI runs it on every pull request, and byte-compiles the Python scripts.
 ./tools/selftest.sh                 # BLENDER=/path/to/blender if it is not on the path
 ```
 
-It builds an awkward model (two textured parts under a parent that is moved,
-turned and scaled), runs `finish_model.py` and `preview_model.py` on it, and
-fails unless every finished file holds one object with no rotation or scale,
-stands 2 m tall on the ground, is centred, keeps its textures at 512 texels or
-less, and has fewer triangles than the level before it. It takes about five
-seconds and spends no Tripo3D credits.
+It builds an awkward model (four textured parts under a parent that is
+moved, turned and scaled), runs `finish_model.py` and `preview_model.py` on
+it, and fails unless every finished file holds one object with no rotation or
+scale, stands 2 m tall on the ground, is centred, keeps its textures at 512
+texels or less, and has fewer triangles than the level before it. Then it
+renders reference views of the finished model, prepares them with
+`prepare_views.py`, compares the model with them with `compare_views.py`,
+checks that swapped left and right views score low, and bakes the model onto
+a tenth of its triangles with `bake_maps.py`. It takes about 25 seconds and
+spends no Tripo3D credits.
+
+The scripts run on Blender's own Python, with its bundled `numpy` and nothing
+else, so a user needs no other package.
 
 CI cannot run it, because it needs Blender. Run it after any change to
 `tripo3d-blender/tools/`, and say in the pull request which Blender version

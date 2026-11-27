@@ -1,7 +1,7 @@
 # Errors
 
-What to do when a command fails. For Tripo's API error codes behind these,
-run `tripo docs --topic common-errors`.
+What to do when a command or a script fails. For Tripo's API error codes
+behind these, run `tripo docs --topic common-errors`.
 
 ## CLI exit codes
 
@@ -41,3 +41,11 @@ run `tripo docs --topic common-errors`.
 | Thousands of parts after splitting by loose parts | The seams were not merged | Merge the doubled vertices first, as in [blender](blender.md#fixes-as-code) |
 | A preview shows the back of the model | The turn is wrong | Change `--turn` by 180 and finish again from the raw file |
 | Nothing listens on port 9876 | Blender is closed, or *Allow Online Access* is off | Ask the human, as in [blender](blender.md#live-blender) |
+| `prepare_views: no picture named front, left, back, right or top` | The files have other names | Name them `front.png`, `left.png`, `back.png`, `right.png` and `top.png` |
+| `prepare_views: found no object in ...` | The object has the backdrop's colour, or the picture is blank | Make the picture again on a backdrop far from the object's colours |
+| Warning `the backdrop is not one plain colour` | A gradient, a shadow or a scene behind the object | Make the picture again, or cut the object out with a background-removal model and use `--alpha` |
+| Warning `the object touches the edge of the picture` | The object is cut off | Make the picture again with space on every side |
+| Warning `enlarged ... times` | The object has fewer pixels than the canvas needs | Make a larger picture, or lower `--size` |
+| `compare_views: no views.json in ...` | The folder was not written by `prepare_views.py` | Prepare the views first, and pass that folder |
+| `bake_maps: ... holds N meshes` | The model is not finished | Finish it with `finish_model.py` first |
+| A baked normal map with holes, smears or detail from another part | The bake's reach is wrong | Raise `--cage` for holes and smears; lower it for detail from another part |

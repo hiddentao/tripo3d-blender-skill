@@ -17,7 +17,19 @@ models, the parameters, Tripo's own processing steps and the costs.
 
 For several pictures, file names that contain `front`, `back`, `left` or
 `right` set each view. Without them the order is front, left, back, right. A
-front view is required.
+front view is required. The CLI matches any name that contains the word, and
+checks `front`, then `back`, then `left`, then `right`, so
+`background_left.png` lands in the back slot. Name the files `front.png`,
+`left.png`, `back.png` and `right.png`, as `prepare_views.py` does.
+
+"Left" is the object's own left side, the side on the viewer's right when
+the viewer faces the front. Tripo's docs do not say this. A run on
+2026-11-27 (H3.1 through fal.ai) put the picture from the left slot on the
+model's own left, and the picture from the right slot on its own right.
+
+The four views of a `tripo generate image-to-multiview` task go to a model
+with `tripo generate multiview-to-model @last`; see
+[pictures](pictures.md#tripos-own-picture-tools).
 
 The picture decides the result. Give the whole object, alone, on a plain
 background, lit softly and evenly. The model copies the surface, so wear,
@@ -26,6 +38,32 @@ cut from a larger scene, crop it close and clear the background first.
 Pictures up to 20 MB are accepted. [pictures](pictures.md) has how to make
 the pictures for a model that must match a target, and how to have them
 reviewed before you pay.
+
+## AAA settings
+
+For a hero model that will be baked onto a game mesh (see
+[blender](blender.md#baking-onto-a-game-mesh)), ask for the most detail
+Tripo3D gives, and dry-run it first:
+
+```bash
+tripo make views/crate/front.png views/crate/left.png \
+  views/crate/back.png views/crate/right.png \
+  --model tripo-v3.1 --seed 7 -p geometry_quality=detailed \
+  -p face_limit=500000 -p pbr=true -p texture_quality=detailed \
+  -p texture_version=v3.5-20260815 -p delight=true \
+  --name crate -o tripo-out/crate --dry-run --json
+```
+
+With `tripo-cli` 0.11.4 on 2026-11-27, this dry run was valid, with no
+warnings, at 60 credits; `texture_quality=extreme` (8K maps) made it 70.
+Both are over 50 credits, so ask the human first. The same request through
+fal.ai's H3.1 multiview endpoint returned a 23.6 MB GLB of 440,650
+triangles, with every face's detail from the four views. That endpoint takes
+no `delight` or `texture_version` setting.
+
+H3.1 gives up to 2,000,000 faces with `geometry_quality=detailed`. More
+faces than the bake needs slow every later step. A limit of 500,000 kept a
+crate's panel lines and bolts.
 
 ## Models
 
@@ -73,6 +111,8 @@ account, 2026-11-20:
 | --- | --- |
 | One picture on H3.1, detailed textures, PBR, delighting | 40 credits |
 | The same picture on P2 with the CLI's defaults | 110 credits |
+| Four views on H3.1, detailed geometry and textures, PBR, delighting (`tripo-cli` 0.11.4, 2026-11-27) | 60 credits |
+| The same with `texture_quality=extreme` | 70 credits |
 
 Tripo's price list for H3.1 on the same day:
 
@@ -117,6 +157,46 @@ Decimation in Blender is free, so use Tripo's `decimate` only when
 Blender's result spoils the shape. Tripo's retopology rebuilds the mesh and
 bakes the textures onto it, which keeps a low-poly model looking like the
 original.
+
+## Tripo direct or fal.ai
+
+The same Tripo3D models run two ways: directly on the human's Tripo account,
+through `tripo-cli` or Tripo's MCP server, or through fal.ai's hosted Tripo
+endpoints, billed to the human's fal.ai account. Compare them before each
+paid step, and take the cheaper route that supports every setting the model
+needs. Show the human both figures when you ask for the go-ahead.
+
+1. **Count the credits, for free.** Use the CLI's dry run
+   (`tripo make ... --dry-run --json`, which needs no key), or call the MCP
+   server's generation tool (`tripo_image_to_3d`, `tripo_multiview_to_3d` or
+   `tripo_text_to_3d`) with `dry_run: true`. Both return the list price in
+   credits. `tripo_plan` prices a job of several steps; steps it marks
+   `not_estimated` are not free.
+2. **Price the direct route.** Tripo's billing page, read on 2026-11-27,
+   sets 1 credit at USD 0.01, and from 2026-12-01 its console shows prices
+   and balances in dollars at that rate. Top-up benefits can make the
+   human's own rate lower. Ask the human once for the rate they pay, and
+   record it in the project notes. Check `tripo balance` (or the MCP tool
+   `tripo_balance`): credits already bought are already paid for, and a run
+   the balance cannot cover fails with exit code 4.
+3. **Price the fal.ai route.** Read fal.ai's current rate for the endpoint,
+   such as `tripo3d/h3.1/multiview-to-3d`, with fal.ai's pricing tool when
+   its MCP server is connected, or on the model's page at
+   <https://fal.ai/models>. On 2026-11-27 its H3.1 endpoints billed USD 0.01
+   per Tripo credit. This skill did not see the final charge of its own fal.ai
+   run, so check the account's history after the first run.
+4. **Check the settings.** On 2026-11-27, fal.ai's H3.1 endpoints took no
+   `delight` or `texture_version` setting, offered `texture_quality` only as
+   `standard` or `detailed`, and set `pbr` on by default. Tripo's picture
+   tools, such as image-to-multiview, were not among fal.ai's endpoints. A
+   request that needs any of these goes direct, whatever it costs.
+5. **Choose and record.** Write the route, the credit estimate and the
+   dollar figure for each route beside the raw files, with the run's
+   `credits_consumed` (direct) or the fal.ai request id.
+
+The same comparison applies to pictures. Tripo's picture models cost 5 to 20
+credits a picture on its price list; an image model on fal.ai has its own
+rate per picture, such as USD 0.15 for Nano Banana Pro at 2K on 2026-11-27.
 
 ## Keeping results
 
