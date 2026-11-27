@@ -22,11 +22,16 @@ to four concept pictures, or take the human's, and have the human accept
 one. Name each visible face by its place in the picture, because image models
 confuse an object's own left and right.
 
-**3. Break a scene into items.** Tripo3D makes one object per run. For a
-scene concept, list every item and give it its own run, one run placed many
-times, or a Blender build (walls, floors, glass, rope, chains). Draw each item
-on its own from the scene, naming each unusual part and each material colour
-in words.
+**3. Break a scene into items, and model only what the player cares
+about.** Tripo3D makes one object per run. Ask the human where the player can
+go, what they can use, how close the camera comes and what the budget is.
+Then sort every item into a tier: interactive (its own AAA run), set dressing
+(a cheaper run, copies reused), background (a picture on a card or in the
+wall's texture, no run) or backdrop (one wide picture). Put unclear items in
+the background, and let the human move items between tiers before you spend
+anything. Walls, floors, glass, rope and chains are Blender builds. Draw each
+item that gets a run on its own from the scene, naming each unusual part and
+each material colour in words.
 
 **4. Make matched views, and have them reviewed before you pay.** Make the
 front first, then the left, back and right from the concept and the passed

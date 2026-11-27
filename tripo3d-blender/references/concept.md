@@ -35,14 +35,16 @@ The pictures leave them out, and Blender builds them.
 ## Quality tiers
 
 The tier decides the picture size, the Tripo3D settings and the Blender
-work. Credit figures are list prices from dry runs with `tripo-cli` 0.11.4
-on 2026-11-27.
+work. In a scene, the item's tier in
+[scenes](scenes.md#sort-the-items-into-tiers) picks it: interactive items are
+AAA heroes, and set dressing is a standard prop. Credit figures are list
+prices from dry runs with `tripo-cli` 0.11.4 on 2026-11-27.
 
 | Tier | Pictures | Tripo3D run | Blender |
 | --- | --- | --- | --- |
 | AAA hero | 2048 px, four views | H3.1 with `geometry_quality=detailed` and `texture_quality=detailed`: 60 credits, or 70 with 8K maps | Bake onto a game mesh with `bake_maps.py` |
 | Standard prop | 1024 to 2048 px, two to four views | H3.1 with detailed textures: 40 credits | `finish_model.py` with `--levels` |
-| Background | One 1024 px picture | H3.1 with standard textures and a low `face_limit`: 30 credits | `finish_model.py` with `--levels` |
+| Distant prop | One 1024 px picture | H3.1 with standard textures and a low `face_limit`: 30 credits | `finish_model.py` with `--levels` |
 
 Every AAA run is over 50 credits, so ask the human before it, as SKILL.md
 says.

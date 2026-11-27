@@ -8,21 +8,59 @@ together in Blender or in the engine.
 
 A separate run for each item gives better models than one run for a group.
 Each item then fills its own pictures, gets the whole face budget, and keeps
-its own materials. Group items only when the rules below allow it.
+its own materials. Group items only when the rules below allow it. And not
+every item needs a model at all: items that the player never comes near can
+stay as pictures in the background.
 
-## Make an inventory
+## Ask about the scene
 
-List every item in the scene concept, with how many there are and where
-they stand. Then give each one a route:
+Not every item in a scene needs a model. The player cares about what they
+use and what they walk past; the rest is background. Before you list the
+items, ask the human four questions about the scene:
+
+1. Where can the player go: walk around inside it, see it only from fixed
+   views, or pass it at a distance?
+2. What can the player touch, use, move or collide with here?
+3. How close does the camera come to the walls and the furniture?
+4. What is the scene's budget: triangles, texture memory, or the slowest
+   device it must run on?
+
+With these answers you can propose a tier for every item, and the human only
+corrects the exceptions. Do not ask about each item in turn.
+
+## Sort the items into tiers
+
+List every item in the scene concept, with how many there are and where they
+stand. Give each one a tier and a one-line reason:
+
+| Tier | Items | How it is made |
+| --- | --- | --- |
+| Interactive | What the player uses, moves or collides with: the pool table, the balls, the cues, a door that opens | Its own run at the AAA tier (see [concept](concept.md#quality-tiers)), baked onto a game mesh, with its moving parts as separate items and a collision shape |
+| Set dressing | Still items that the camera passes close to and sees from more than one side: chairs, a display cabinet, an oar rack, a canoe overhead | One run each at the standard tier, placed as copies where it repeats, with a simple collision shape or none |
+| Background | Items seen from one side or from far away: ropes and buoys hung on a wall, framed pictures, trophies behind glass | No run. A flat card with the item's picture on it, or relief painted into the wall's texture and normal map. A far item that needs real depth gets one run at the distant-prop tier |
+| Backdrop | The view beyond the playable space: the sea, the boats, the sky | One wide picture on a backdrop plane or as a sky map |
+
+Four tests decide the tier. Does the player interact with it? Does it move?
+Is it seen close up, or from more than one side? Does it repeat? An item that
+fails all four is background. When an item is unclear, put it in the
+background. Moving it up a tier later costs one run. Making every item a
+model spends credits, and the scene's triangle and texture budget, on things
+that no one looks at.
+
+Show the human the whole table, with the tiers and the reasons, and let them
+move items between tiers. Spend nothing until they confirm it.
+
+## Choose how each item is made
+
+Some items need a route other than a Tripo3D run, whatever their tier:
 
 | What the item is | Route |
 | --- | --- |
-| A piece of furniture or a prop that appears once: a pool table, a display cabinet, a canoe | Its own spec, pictures and run |
 | An item that repeats: chairs, oars, trophies, buoys, barrels | One run, placed many times. Two designs, such as a low chair and a bar stool, are two items |
+| A simple shape: a ball, a plain plank, a pipe | Model it in Blender. A run costs credits for a shape that takes a minute to build |
 | The shell: walls, floor, ceiling, beams, door frames | Build in Blender with tiling materials. Tripo3D gives a closed object with one texture that does not repeat, and a wall needs exact sizes and a texture that does |
 | A part only a few pixels thick against the item it belongs to: rope, chains, cables, rigging, a hanging lamp's rod | Build in Blender. A coiled rope or a bundle that forms a solid mass can be a run |
 | Glass, water, flames and lights: lamp glass, a glass dome, the glass of a cabinet door, a harbour | Build in Blender or in the engine. In the pictures, show glass as an opaque stand-in or leave it out |
-| The view outside: sky, sea, distant buildings | A backdrop, a sky map or separate low-detail models |
 | Text and logos: signs, labels, framed certificates | A plain shape from Tripo3D, with the text added as a decal in Blender or the engine |
 
 Group items into one run only when all of these hold: they touch, they never
@@ -34,16 +72,37 @@ balls on it are separate items, because the balls move.
 Write the inventory into the scene's spec, one row for each item, before
 any picture is made:
 
-| Item | Count | Size (m) | Route | Notes |
-| --- | --- | --- | --- | --- |
-| Pool table | 1 | 2.1 x 1.2 x 0.8 | Own run | Cloth green; coin slot on the long side |
-| Windsor chair, low | 1 | 0.9 tall | Own run | Back legs hidden in the concept: invented |
-| Oar | 12 | 2.4 long | One run, placed 12 times | Rack built in Blender |
-| Stone wall | 4 | from the floor plan | Blender, tiling material | |
+| Item | Count | Tier | Size (m) | Route | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Pool table | 1 | Interactive | 2.1 x 1.2 x 0.8 | Own run | Cloth dark teal; coin slot on the long side |
+| Pool balls | 16 | Interactive | about 0.05 across | Blender spheres | |
+| Tall chair | 2 | Set dressing | 1.0 tall | One run, placed twice | Back legs hidden in the concept: invented |
+| Oar | 12 | Set dressing | 2.4 long | One run, placed 12 times | Rack built in Blender |
+| Rope coil on the wall | 3 | Background | 0.4 across | Card from the item's picture | Seen from the front only |
+| Harbour view | 1 | Backdrop | | Wide picture beyond the door | |
+| Stone wall | 4 | Shell | from the floor plan | Blender, tiling material | |
 
-The rows here are an example. Every size comes from the human or from the
-measuring below, and the human confirms the inventory before you spend
-anything on it.
+The rows here are an example. Every tier is the human's to confirm, every
+size comes from the human or from the measuring below, and the human
+confirms the inventory before you spend anything on it.
+
+### Cards and backdrops
+
+A background card is a flat plane that shows the item's picture, with a
+transparent background, placed where the item stands. Make the picture as in
+[Draw each item on its own](#draw-each-item-on-its-own), facing the camera,
+name it `front.png`, and cut it out with `prepare_views.py --alpha`. A card
+looks right only from the front, so use it for items that the camera sees
+from one side.
+null3d's asset tool can also turn a finished model into cards for its
+impostors add-on (`assets impostor`), for far copies of a model that has one;
+see null3d's documentation.
+
+A backdrop is one wide picture of the view beyond the playable space. Ask an
+image model to extend the concept's view outside into a wide picture with
+nothing in front of it, and place it on a plane beyond the openings, or use
+it as a sky map. It shows no change of angle as the camera moves, so keep it
+for what is far away.
 
 ## Measure each item
 

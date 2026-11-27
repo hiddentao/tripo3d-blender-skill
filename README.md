@@ -37,9 +37,11 @@ agent or a person, tries to fail them against the concept. Only pictures
 that pass go to Tripo3D. In the project this skill comes from, eight models
 made this way each took one run.
 
-A scene concept, such as a furnished room, becomes an inventory of items.
-Each item gets its own pictures and its own run, or is built in Blender, and
-Blender puts the scene back together. For AAA work, the skill asks Tripo3D
+A scene concept, such as a furnished room, becomes an inventory of items,
+each in a tier the human confirms: interactive items and set dressing get
+their own pictures and runs, background items stay as pictures on cards or
+in the wall's texture, and the view outside is one backdrop. Blender puts
+the scene back together. For AAA work, the skill asks Tripo3D
 for its most detailed mesh and bakes it onto a game mesh. For the web, it
 hands the models to the null3d engine.
 
@@ -69,7 +71,8 @@ The agent gets:
 1. **Take the base from Tripo3D, do the fine work in Blender.** Pay for a new
    run only when the shape is wrong.
 2. **Write the spec, then get the concept accepted** by the human.
-3. **Break a scene into items,** each with its own run, or built in Blender.
+3. **Break a scene into items,** and model only what the player cares
+   about; the rest stays in the background.
 4. **Have the views reviewed before you pay.** A fault in a picture comes
    back in the mesh, and a new run costs the credits again.
 5. **Use the official CLI.** `npm install -g tripo-cli`, then
@@ -195,7 +198,7 @@ over 50 credits, any run on the more expensive P2 model, and any batch over
 ## How it is laid out
 
 `tripo3d-blender/SKILL.md` takes one model from setup to a finished GLB in
-317 lines. The seven files in `references/` cover setup, the spec and
+322 lines. The seven files in `references/` cover setup, the spec and
 concept, scenes, input pictures, generation, Blender and errors, and the
 agent reads each one only when a task needs it.
 `tools/` holds the five Blender scripts that the skill runs.

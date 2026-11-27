@@ -34,8 +34,8 @@ when the task needs its detail.
 | Reference | Open it when you are | Lines |
 | --- | --- | --- |
 | [setup](references/setup.md) | installing or signing in, adding the MCP server, working on Linux, or tempted by another Tripo route | 156 |
-| [concept](references/concept.md) | writing the spec, choosing a quality tier, or making and accepting concept art | 135 |
-| [scenes](references/scenes.md) | making the items of a scene or environment, such as a furnished room, from one scene concept | 141 |
+| [concept](references/concept.md) | writing the spec, choosing a quality tier, or making and accepting concept art | 137 |
+| [scenes](references/scenes.md) | making the items of a scene or environment, such as a furnished room, from one scene concept | 200 |
 | [pictures](references/pictures.md) | making the reference views, preparing and measuring them, and having them reviewed | 376 |
 | [generation](references/generation.md) | choosing a model or parameters, AAA settings, using several pictures, chaining Tripo's own steps, or counting credits | 226 |
 | [blender](references/blender.md) | fixing a model, checking it against the views, baking a game mesh, handing it to null3d, or working in a live Blender | 443 |
@@ -105,11 +105,16 @@ tier: an AAA hero model gets 2048-pixel views, Tripo's most detailed settings
 and a bake onto a game mesh.
 [concept](references/concept.md#the-spec) has the fields and the tiers.
 
-When the concept shows a whole scene, such as a furnished room, list every
-item in it and give each a route: its own run, one run placed many times, or
-built in Blender. A separate run for each item gives better models than one
-run for a group. [scenes](references/scenes.md) has the inventory, how to
-measure each item, and how to draw each item on its own from the scene.
+When the concept shows a whole scene, such as a furnished room, ask the
+human where the player can go, what they can use, how close the camera comes
+and what the scene's budget is. Then sort every item into a tier: interactive
+(its own AAA run), set dressing (a cheaper run, copies reused), background (a
+picture on a card or in the wall's texture, no run) or backdrop (one wide
+picture). When an item is unclear, put it in the background. The human moves
+items between tiers before anything is spent. A separate run for each item
+gives better models than one run for a group.
+[scenes](references/scenes.md) has the tiers, the inventory, how to measure
+each item, and how to draw each item on its own from the scene.
 
 ## 4. Make the concept art
 

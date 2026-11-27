@@ -233,7 +233,7 @@ crate, the views agreed at 0.975 and 0.992.
   the views.
 - Show it on a flat base, standing level.
 - Long plain walls, floors and roofs are better as simple meshes with tiling
-  materials in Blender (see [scenes](scenes.md#make-an-inventory)).
+  materials in Blender (see [scenes](scenes.md#choose-how-each-item-is-made)).
 
 ### Rocks, trees and statues
 
